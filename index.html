@@ -188,6 +188,48 @@ header h1 .accent{color:var(--scarlet);-webkit-text-stroke:1px var(--canvas)}
 .tl-item strong{color:var(--canvas);font-size:1.05rem}
 .tl-item p{color:var(--sage);font-size:.95rem;margin-top:2px}
 
+/* ---------- flash cards ---------- */
+.flash{padding:56px 24px;border-top:1px solid var(--sage-dim)}
+.flash-filters{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0}
+.flash-stage{max-width:720px}
+.flip{
+  perspective:1200px;cursor:pointer;border:none;background:none;width:100%;
+  display:block;text-align:left;padding:0;
+}
+.flip-inner{
+  position:relative;width:100%;min-height:240px;
+  transition:transform .5s;transform-style:preserve-3d;
+}
+.flip[aria-pressed="true"] .flip-inner{transform:rotateY(180deg)}
+.flip-face{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:var(--radius);padding:26px 28px;display:flex;flex-direction:column;justify-content:center;
+}
+.flip-front{background:var(--canvas);color:var(--ink);border-top:6px solid var(--scarlet)}
+.flip-back{background:var(--od-deep);color:var(--canvas);border:1px solid var(--sage-dim);border-top:6px solid var(--gold);transform:rotateY(180deg)}
+.flip .kind{
+  font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.flip-front .kind{color:var(--scarlet)}
+.flip-back .kind{color:var(--gold)}
+.flip .q{font-family:"Big Shoulders Stencil Display",sans-serif;font-size:1.9rem;font-weight:900;text-transform:uppercase;line-height:1.1}
+.flip .a{font-size:1.08rem;font-weight:500;line-height:1.5}
+.flip .tap{
+  margin-top:16px;font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.18em;
+  text-transform:uppercase;color:#8d8467;
+}
+.flip-back .tap{color:var(--sage)}
+.flash-nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px}
+.flash-nav .deck-btn{font-size:.95rem;padding:10px 18px}
+.flash-count{
+  font-family:"IBM Plex Mono",monospace;font-size:.8rem;letter-spacing:.14em;color:var(--sage);
+  margin-left:auto;
+}
+@media (prefers-reduced-motion:reduce){
+  .flip-inner{transition:none}
+}
+
 footer{padding:34px 24px 44px;border-top:1px solid var(--sage-dim);color:var(--sage);font-size:.9rem}
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
@@ -216,7 +258,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <h1>MC3 Training <span class="accent">Games</span></h1>
     <p class="sub">Twelve classroom games that turn the MC3 wallchart into live practice — rapport, questioning, objections, disinterest, and closing the commitment. Pick a game, brief the rules, run the drill.</p>
     <div class="hero-tags">
-      <span>12 games</span><span>8 skills</span><span>Drill card generator</span><span>Print-friendly</span>
+      <span>12 games</span><span>8 skills</span><span>51 flash cards</span><span>Drill card generator</span><span>Print-friendly</span>
     </div>
   </div>
 </header>
@@ -562,6 +604,50 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </div>
 </section>
 
+<section class="flash" aria-labelledby="flash-h">
+  <div class="wrap">
+    <p class="section-label">Study Tool</p>
+    <h2 id="flash-h">Definition flash cards</h2>
+    <p class="section-note">Every definition, plus the What, Why, When, How, and Wrong Turns for all eight MC3 pages. Tap the card to flip it. Filter to study one page at a time.</p>
+
+    <div class="flash-filters" role="group" aria-label="Filter flash cards by page">
+      <button class="chip fchip" aria-pressed="true" data-fc="all">All</button>
+      <button class="chip fchip" aria-pressed="false" data-fc="Definitions">Definitions</button>
+      <button class="chip fchip" aria-pressed="false" data-fc="Build Rapport">Build Rapport</button>
+      <button class="chip fchip" aria-pressed="false" data-fc="Listen with Purpose">Listen w/ Purpose</button>
+      <button class="chip fchip" aria-pressed="false" data-fc="Engage">Engage</button>
+      <button class="chip fchip" aria-pressed="false" data-fc="Explore">Explore</button>
+      <button class="chip fchip" aria-pressed="false" data-fc="Enable">Enable</button>
+      <button class="chip fchip" aria-pressed="false" data-fc="Gain Commitment">Gain Commitment</button>
+      <button class="chip fchip" aria-pressed="false" data-fc="Respond to Objections">Objections</button>
+      <button class="chip fchip" aria-pressed="false" data-fc="Respond to Disinterest">Disinterest</button>
+    </div>
+
+    <div class="flash-stage">
+      <button class="flip" id="flip-card" aria-pressed="false" aria-label="Flash card, press to flip">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <p class="kind" id="fc-cat-front">Category</p>
+            <p class="q" id="fc-question">Question</p>
+            <p class="tap">Tap to reveal</p>
+          </div>
+          <div class="flip-face flip-back">
+            <p class="kind" id="fc-cat-back">Category</p>
+            <p class="a" id="fc-answer">Answer</p>
+            <p class="tap">Tap to flip back</p>
+          </div>
+        </div>
+      </button>
+      <div class="flash-nav">
+        <button class="deck-btn dis" id="fc-prev">◀ Prev</button>
+        <button class="deck-btn scn" id="fc-next">Next ▶</button>
+        <button class="deck-btn mot" id="fc-shuffle">Shuffle</button>
+        <span class="flash-count" id="fc-count">1 / 1</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="compday" aria-labelledby="comp-h">
   <div class="wrap">
     <p class="section-label">Recommended Class Plan</p>
@@ -648,7 +734,7 @@ const textEl = document.getElementById('drill-text');
 const hintEl = document.getElementById('drill-hint');
 let lastCard = null;
 
-document.querySelectorAll('.deck-btn').forEach(btn => {
+document.querySelectorAll('.deck-btn[data-deck]').forEach(btn => {
   btn.addEventListener('click', () => {
     const deck = decks[btn.dataset.deck];
     let pick;
@@ -661,6 +747,134 @@ document.querySelectorAll('.deck-btn').forEach(btn => {
     hintEl.textContent = deck.hint;
   });
 });
+
+// ---------- flash cards ----------
+// Edit this array to match your wallchart's exact wording.
+// cat = page name, q = card front, a = card back.
+const flashCards = [
+  // ===== Definitions =====
+  { cat:'Definitions', q:'What is a motivator?', a:'A force that can drive a need. Motivators can be circumstances, feelings, or goals — like money, family pride, education, challenge, travel, purpose, career direction, belonging, discipline, or physical improvement.' },
+  { cat:'Definitions', q:'What is a need?', a:'What the applicant is trying to change, gain, or achieve in their life. Needs are uncovered through open questions during Explore.' },
+  { cat:'Definitions', q:'What is a feature?', a:'A fact about the Marine Corps — for example, "the Marine Corps offers education benefits" or "Marines receive leadership training."' },
+  { cat:'Definitions', q:'What is a benefit?', a:'What a feature does for the applicant\'s specific need — for example, "that can help you pay for college and reduce financial stress."' },
+  { cat:'Definitions', q:'What is an open question?', a:'A question that invites the applicant to explain in their own words — usually starting with what, why, or how. Open questions uncover needs and motivators.' },
+  { cat:'Definitions', q:'What is a closed question?', a:'A question answered with yes, no, or a short fact. Useful for confirming and testing for yes — not for exploring.' },
+  { cat:'Definitions', q:'What does "test for yes" mean?', a:'Asking a question that confirms agreement and readiness to move forward — for example, "Does that work?" It closes objections, disinterest responses, and commitments.' },
+  { cat:'Definitions', q:'What is an objection?', a:'A concern or reason the applicant gives for hesitating — like "I need to talk to my parents" or "College is more important." An objection is information, not rejection.' },
+  { cat:'Definitions', q:'What is disinterest?', a:'When an applicant does not appear interested in having the conversation at all — like "I\'m good" or "I\'m just waiting for my friend."' },
+  { cat:'Definitions', q:'What is a wrong turn?', a:'A mistake that stalls or derails the conversation — like talking more than asking, arguing, sounding robotic, or dumptrucking irrelevant features.' },
+  { cat:'Definitions', q:'What is "dumptrucking"?', a:'Unloading a pile of features that have nothing to do with the applicant\'s actual need. Features only matter when connected to a need as a benefit.' },
+
+  // ===== Build Rapport =====
+  { cat:'Build Rapport', q:'WHAT is Build Rapport?', a:'Establishing trust and comfort with the applicant so a real conversation can happen.' },
+  { cat:'Build Rapport', q:'WHY build rapport?', a:'People only share their real needs and motivators with someone they trust. Without rapport, every later step fails.' },
+  { cat:'Build Rapport', q:'WHEN do you build rapport?', a:'From the first moment of contact — and you maintain it through the entire conversation, not just the opening.' },
+  { cat:'Build Rapport', q:'HOW do you build rapport?', a:'Demonstrate Marine Corps values, find common ground, and match and mirror the applicant\'s tone and energy.' },
+  { cat:'Build Rapport', q:'WRONG TURNS in Build Rapport?', a:'Sounding robotic or scripted, inappropriate jokes, and intimidation. Rapport must feel natural and professional.' },
+
+  // ===== Listen with Purpose =====
+  { cat:'Listen with Purpose', q:'WHAT is Listen with Purpose?', a:'Active listening for both facts AND feelings — including what the applicant\'s body language is saying.' },
+  { cat:'Listen with Purpose', q:'WHY listen with purpose?', a:'Needs, motivators, and concerns live underneath the words. Feelings tell you what the facts mean to the applicant.' },
+  { cat:'Listen with Purpose', q:'WHEN do you listen with purpose?', a:'The entire conversation — it runs alongside every other MC3 step.' },
+  { cat:'Listen with Purpose', q:'HOW do you listen with purpose?', a:'Watch body language, listen for facts and feelings, and respond to what you observe — "You seem unsure about something. What part concerns you most?"' },
+  { cat:'Listen with Purpose', q:'WRONG TURNS in Listen with Purpose?', a:'Listening only for facts, planning your next line instead of listening, and ignoring body language.' },
+
+  // ===== Engage =====
+  { cat:'Engage', q:'WHAT is Engage?', a:'Opening the conversation naturally and giving it direction toward the applicant\'s future.' },
+  { cat:'Engage', q:'WHY engage?', a:'A natural opening earns the right to ask questions. Jumping straight to a pitch shuts the applicant down.' },
+  { cat:'Engage', q:'WHEN do you engage?', a:'After initial rapport is built — it is the bridge from small talk into a purposeful conversation.' },
+  { cat:'Engage', q:'HOW do you engage?', a:'Open naturally, transition to purpose, and invite the applicant to do the talking.' },
+  { cat:'Engage', q:'WRONG TURNS in Engage?', a:'Launching into a sales pitch, sounding scripted or robotic, and making it about you instead of the applicant.' },
+
+  // ===== Explore =====
+  { cat:'Explore', q:'WHAT is Explore?', a:'Using open questions to uncover the applicant\'s needs and motivators.' },
+  { cat:'Explore', q:'WHY explore?', a:'You cannot connect the Marine Corps to a need you have not found. Motivators can be circumstances, feelings, or goals.' },
+  { cat:'Explore', q:'WHEN do you explore?', a:'Before presenting any features or benefits — Explore always comes before Enable.' },
+  { cat:'Explore', q:'HOW do you explore?', a:'Ask open questions like "What are you hoping to change in your life?" — then follow up with "Why is that important to you?" and confirm what you heard.' },
+  { cat:'Explore', q:'WRONG TURNS in Explore?', a:'Talking more than asking, using closed questions too early, and assuming the need instead of uncovering it.' },
+
+  // ===== Enable =====
+  { cat:'Enable', q:'WHAT is Enable?', a:'Connecting Marine Corps features to the applicant\'s specific needs — turning facts into benefits.' },
+  { cat:'Enable', q:'WHY enable?', a:'Facts alone don\'t persuade — relevance does. A feature only matters when it answers something the applicant actually cares about.' },
+  { cat:'Enable', q:'WHEN do you enable?', a:'Only after needs and motivators have been uncovered in Explore.' },
+  { cat:'Enable', q:'HOW do you enable?', a:'Pick the feature that fits their need, state the benefit — "that can help you pay for college and reduce financial stress" — and confirm it matters to them.' },
+  { cat:'Enable', q:'WRONG TURNS in Enable?', a:'Dumptrucking irrelevant features and listing facts without connecting them to the applicant\'s need.' },
+
+  // ===== Gain Commitment =====
+  { cat:'Gain Commitment', q:'WHAT is Gain Commitment?', a:'Asking for the most aggressive realistic next step — appointment, application, practice ASVAB, bringing parents to the office.' },
+  { cat:'Gain Commitment', q:'WHY gain commitment?', a:'Conversations that end vaguely go nowhere. A commitment moves the applicant forward and gives the next contact a purpose.' },
+  { cat:'Gain Commitment', q:'WHEN do you gain commitment?', a:'After Enable — once the Marine Corps has been connected to their needs and motivators.' },
+  { cat:'Gain Commitment', q:'HOW do you gain commitment?', a:'Tie next steps to their motivators, ask for the strongest realistic commitment, and test for yes — "the next step is to come by tomorrow at 1600. Does that work?"' },
+  { cat:'Gain Commitment', q:'WRONG TURNS in Gain Commitment?', a:'Ending vaguely, never actually asking, and settling for a weaker commitment than the situation supports.' },
+
+  // ===== Respond to Objections =====
+  { cat:'Respond to Objections', q:'WHAT is Respond to Objections?', a:'A four-step process for handling an applicant\'s concerns without arguing or rushing.' },
+  { cat:'Respond to Objections', q:'WHY respond to objections?', a:'An objection is information, not rejection — it tells you exactly what stands between the applicant and a yes.' },
+  { cat:'Respond to Objections', q:'WHEN do you respond to objections?', a:'Whenever a concern surfaces, at any point in the conversation.' },
+  { cat:'Respond to Objections', q:'HOW do you respond to objections?', a:'1) Ask questions to understand the objection. 2) Respect the objection. 3) Address the objection. 4) Test for yes.' },
+  { cat:'Respond to Objections', q:'WRONG TURNS in Respond to Objections?', a:'Arguing, rushing to answer before you understand the objection, and ignoring it and pushing harder.' },
+
+  // ===== Respond to Disinterest =====
+  { cat:'Respond to Disinterest', q:'WHAT is Respond to Disinterest?', a:'A recovery process for when someone does not appear to want the conversation at all.' },
+  { cat:'Respond to Disinterest', q:'WHY respond to disinterest?', a:'Disinterest often masks a lack of information rather than a final no — but it also deserves respect if it holds.' },
+  { cat:'Respond to Disinterest', q:'WHEN do you respond to disinterest?', a:'The moment the applicant signals they don\'t want to talk — "I\'m good," "I\'m just waiting for my friend."' },
+  { cat:'Respond to Disinterest', q:'HOW do you respond to disinterest?', a:'1) Ask questions to understand the disinterest. 2) State the value of continuing the conversation. 3) Test for yes. 4) Respect the disinterest if needed.' },
+  { cat:'Respond to Disinterest', q:'WRONG TURNS in Respond to Disinterest?', a:'Ignoring the disinterest, arguing, and pressuring after the applicant has clearly said no.' }
+];
+
+const flipBtn = document.getElementById('flip-card');
+const fcCatF = document.getElementById('fc-cat-front');
+const fcCatB = document.getElementById('fc-cat-back');
+const fcQ = document.getElementById('fc-question');
+const fcA = document.getElementById('fc-answer');
+const fcCount = document.getElementById('fc-count');
+
+let fcDeck = flashCards.slice();
+let fcIndex = 0;
+
+function renderFlash() {
+  const c = fcDeck[fcIndex];
+  flipBtn.setAttribute('aria-pressed', 'false');
+  // let the flip reset before swapping text so the answer isn't revealed mid-turn
+  setTimeout(() => {
+    fcCatF.textContent = c.cat;
+    fcCatB.textContent = c.cat;
+    fcQ.textContent = c.q;
+    fcA.textContent = c.a;
+  }, 60);
+  fcCount.textContent = (fcIndex + 1) + ' / ' + fcDeck.length;
+}
+
+flipBtn.addEventListener('click', () => {
+  flipBtn.setAttribute('aria-pressed', flipBtn.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+});
+document.getElementById('fc-prev').addEventListener('click', () => {
+  fcIndex = (fcIndex - 1 + fcDeck.length) % fcDeck.length;
+  renderFlash();
+});
+document.getElementById('fc-next').addEventListener('click', () => {
+  fcIndex = (fcIndex + 1) % fcDeck.length;
+  renderFlash();
+});
+document.getElementById('fc-shuffle').addEventListener('click', () => {
+  for (let i = fcDeck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [fcDeck[i], fcDeck[j]] = [fcDeck[j], fcDeck[i]];
+  }
+  fcIndex = 0;
+  renderFlash();
+});
+document.querySelectorAll('.fchip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.fchip').forEach(c => c.setAttribute('aria-pressed', 'false'));
+    chip.setAttribute('aria-pressed', 'true');
+    const f = chip.dataset.fc;
+    fcDeck = f === 'all' ? flashCards.slice() : flashCards.filter(c => c.cat === f);
+    fcIndex = 0;
+    renderFlash();
+  });
+});
+renderFlash();
 </script>
 </body>
 </html>
