@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MC3 Training Games — Instructor Edition</title>
+<meta name="description" content="Twelve classroom games for teaching the MC3 consultative communication process: Build Rapport, Listen with Purpose, Engage, Explore, Enable, Gain Commitment, Respond to Objections, Respond to Disinterest.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@500;700;900&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --od:#1e2418;          /* olive-drab page ground */
+  --od-deep:#161b12;
+  --canvas:#e9e2ce;      /* khaki card paper */
+  --canvas-dim:#ddd4bb;
+  --ink:#14170f;
+  --scarlet:#a6192e;     /* USMC scarlet */
+  --gold:#e0a526;
+  --sage:#8b926f;
+  --sage-dim:#5c6349;
+  --radius:6px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--od);
+  color:var(--canvas);
+  font-family:"Barlow",system-ui,sans-serif;
+  font-size:17px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:"Big Shoulders Stencil Display","Barlow",sans-serif;letter-spacing:.02em;line-height:1.05;text-transform:uppercase}
+.mono{font-family:"IBM Plex Mono",monospace}
+a{color:var(--gold)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* ---------- rank stripe ---------- */
+.stripe{height:10px;background:repeating-linear-gradient(-45deg,var(--scarlet)0 18px,var(--gold)18px 26px,var(--od-deep)26px 44px)}
+
+/* ---------- hero ---------- */
+header{
+  border-bottom:1px solid var(--sage-dim);
+  background:
+    radial-gradient(1100px 500px at 15% -10%, rgba(224,165,38,.10), transparent 60%),
+    var(--od-deep);
+  padding:64px 24px 56px;
+}
+.wrap{max-width:1060px;margin:0 auto}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--scarlet);display:inline-block}
+header h1{font-size:clamp(3rem,8.5vw,5.6rem);font-weight:900;color:var(--canvas)}
+header h1 .accent{color:var(--scarlet);-webkit-text-stroke:1px var(--canvas)}
+.sub{max-width:620px;margin-top:18px;color:var(--sage);font-size:1.05rem}
+.hero-tags{margin-top:26px;display:flex;gap:10px;flex-wrap:wrap}
+.hero-tags span{
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid var(--sage-dim);padding:6px 12px;border-radius:3px;color:var(--canvas-dim);
+}
+
+/* ---------- process strip ---------- */
+.process{padding:52px 24px;border-bottom:1px solid var(--sage-dim)}
+.section-label{
+  font-family:"IBM Plex Mono",monospace;font-size:.75rem;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:8px;
+}
+.process h2,.games h2,.deck h2,.compday h2{font-size:clamp(1.8rem,4vw,2.6rem);margin-bottom:6px}
+.section-note{color:var(--sage);max-width:640px;margin-bottom:30px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;counter-reset:step}
+.step{
+  border:1px solid var(--sage-dim);border-radius:var(--radius);padding:14px 16px;
+  background:rgba(0,0,0,.18);counter-increment:step;position:relative;
+}
+.step::before{
+  content:counter(step,decimal-leading-zero);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--scarlet);
+  letter-spacing:.15em;display:block;margin-bottom:4px;
+}
+.step strong{font-weight:700;color:var(--canvas);font-size:.98rem}
+.step em{display:block;font-style:normal;color:var(--sage);font-size:.85rem;margin-top:2px}
+.step.recover{border-style:dashed}
+.step.recover::before{content:"↩ " counter(step,decimal-leading-zero);color:var(--gold)}
+
+/* ---------- filter ---------- */
+.games{padding:56px 24px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.chip{
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;
+  background:none;border:1px solid var(--sage-dim);color:var(--canvas-dim);
+  padding:7px 14px;border-radius:999px;cursor:pointer;transition:all .15s;
+}
+.chip:hover{border-color:var(--gold);color:var(--gold)}
+.chip[aria-pressed="true"]{background:var(--scarlet);border-color:var(--scarlet);color:#fff}
+
+/* ---------- game cards ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+.card{
+  background:var(--canvas);color:var(--ink);border-radius:var(--radius);
+  overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 2px 0 rgba(0,0,0,.4);
+  border-top:6px solid var(--scarlet);
+}
+.card[data-hidden="true"]{display:none}
+.card-head{padding:18px 20px 12px}
+.card-num{
+  font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.2em;color:var(--scarlet);
+  text-transform:uppercase;margin-bottom:6px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;
+}
+.card h3{font-size:1.55rem;font-weight:900;color:var(--ink)}
+.card .purpose{font-size:.95rem;color:#4a4534;margin-top:6px;font-weight:500}
+.card-skills{display:flex;gap:6px;flex-wrap:wrap;padding:0 20px 14px}
+.card-skills span{
+  font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--canvas-dim);border:1px solid #c4b995;padding:3px 8px;border-radius:3px;color:#4a4534;
+}
+.card details{border-top:1px dashed #c4b995}
+.card summary{
+  list-style:none;cursor:pointer;padding:12px 20px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--scarlet);font-weight:600;display:flex;justify-content:space-between;align-items:center;
+}
+.card summary::-webkit-details-marker{display:none}
+.card summary::after{content:"+";font-size:1.05rem;line-height:1}
+.card details[open] summary::after{content:"–"}
+.card-body{padding:0 20px 20px;font-size:.95rem}
+.card-body h4{
+  font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--scarlet);margin:16px 0 6px;
+}
+.card-body h4:first-child{margin-top:2px}
+.card-body ul,.card-body ol{padding-left:20px;margin:6px 0}
+.card-body li{margin:3px 0}
+.card-body .callout{
+  background:#f4efdf;border-left:4px solid var(--gold);padding:10px 14px;margin:10px 0;
+  border-radius:0 4px 4px 0;font-size:.92rem;
+}
+.card-body .callout strong{color:var(--scarlet)}
+.teaches{
+  margin-top:14px;padding-top:12px;border-top:1px dashed #c4b995;
+  font-weight:600;font-size:.92rem;
+}
+.teaches::before{
+  content:"TEACHES";display:block;
+  font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.2em;color:var(--scarlet);
+  font-weight:600;margin-bottom:4px;
+}
+
+/* ---------- drill deck ---------- */
+.deck{padding:56px 24px;border-top:1px solid var(--sage-dim);background:var(--od-deep)}
+.deck-controls{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0}
+.deck-btn{
+  font-family:"Big Shoulders Stencil Display",sans-serif;font-size:1.1rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.06em;padding:12px 22px;border-radius:4px;cursor:pointer;border:1px solid transparent;
+  transition:transform .1s;
+}
+.deck-btn:active{transform:translateY(2px)}
+.deck-btn.obj{background:var(--scarlet);color:#fff}
+.deck-btn.mot{background:var(--gold);color:var(--ink)}
+.deck-btn.dis{background:none;border-color:var(--sage-dim);color:var(--canvas)}
+.deck-btn.scn{background:var(--canvas);color:var(--ink)}
+.drill-card{
+  min-height:150px;background:var(--canvas);color:var(--ink);border-radius:var(--radius);
+  padding:26px 28px;border-top:6px solid var(--gold);max-width:720px;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.drill-card .kind{
+  font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--scarlet);margin-bottom:8px;
+}
+.drill-card .text{font-size:1.35rem;font-weight:600;line-height:1.35}
+.drill-card .hint{margin-top:12px;font-size:.9rem;color:#4a4534}
+.drill-card.empty .text{color:#8d8467;font-weight:400;font-size:1.05rem}
+
+/* ---------- competition day ---------- */
+.compday{padding:56px 24px}
+.timeline{max-width:720px}
+.tl-item{display:grid;grid-template-columns:56px 1fr;gap:16px;padding:16px 0;border-bottom:1px dashed var(--sage-dim)}
+.tl-item:last-child{border-bottom:none}
+.tl-num{
+  font-family:"Big Shoulders Stencil Display",sans-serif;font-size:2rem;font-weight:900;color:var(--scarlet);
+  line-height:1;
+}
+.tl-item strong{color:var(--canvas);font-size:1.05rem}
+.tl-item p{color:var(--sage);font-size:.95rem;margin-top:2px}
+
+footer{padding:34px 24px 44px;border-top:1px solid var(--sage-dim);color:var(--sage);font-size:.9rem}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media print{
+  body{background:#fff;color:#000}
+  header,.deck,.filters,footer{display:none}
+  .card{break-inside:avoid;border:1px solid #999;box-shadow:none}
+  .card details{display:block}
+  .card summary{display:none}
+  .steps,.grid{display:block}
+  .step,.card{margin-bottom:12px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .deck-btn:active{transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="stripe" aria-hidden="true"></div>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow">USMC Recruiting &nbsp;·&nbsp; Instructor Edition</p>
+    <h1>MC3 Training <span class="accent">Games</span></h1>
+    <p class="sub">Twelve classroom games that turn the MC3 wallchart into live practice — rapport, questioning, objections, disinterest, and closing the commitment. Pick a game, brief the rules, run the drill.</p>
+    <div class="hero-tags">
+      <span>12 games</span><span>8 skills</span><span>Drill card generator</span><span>Print-friendly</span>
+    </div>
+  </div>
+</header>
+
+<section class="process" aria-labelledby="process-h">
+  <div class="wrap">
+    <p class="section-label">The Process</p>
+    <h2 id="process-h">MC3 in order</h2>
+    <p class="section-note">Every game maps back to this sequence. The first six steps are the conversation; the last two are recoveries when the conversation goes sideways.</p>
+    <div class="steps">
+      <div class="step"><strong>Build Rapport</strong><em>Values, common ground, match &amp; mirror</em></div>
+      <div class="step"><strong>Listen with Purpose</strong><em>Facts and feelings, body language</em></div>
+      <div class="step"><strong>Engage</strong><em>Open the conversation naturally</em></div>
+      <div class="step"><strong>Explore</strong><em>Open questions uncover needs &amp; motivators</em></div>
+      <div class="step"><strong>Enable</strong><em>Connect features to the applicant's need</em></div>
+      <div class="step"><strong>Gain Commitment</strong><em>State next steps, test for yes</em></div>
+      <div class="step recover"><strong>Respond to Objections</strong><em>Understand, respect, address, test for yes</em></div>
+      <div class="step recover"><strong>Respond to Disinterest</strong><em>Understand, state value, test — or respect it</em></div>
+    </div>
+  </div>
+</section>
+
+<section class="games" aria-labelledby="games-h">
+  <div class="wrap">
+    <p class="section-label">The Playbook</p>
+    <h2 id="games-h">Twelve games</h2>
+    <p class="section-note">Filter by the skill you're teaching today. Open a card for full rules and examples.</p>
+
+    <div class="filters" role="group" aria-label="Filter games by skill">
+      <button class="chip" aria-pressed="true" data-filter="all">All</button>
+      <button class="chip" aria-pressed="false" data-filter="rapport">Rapport</button>
+      <button class="chip" aria-pressed="false" data-filter="listen">Listening</button>
+      <button class="chip" aria-pressed="false" data-filter="explore">Explore</button>
+      <button class="chip" aria-pressed="false" data-filter="enable">Enable</button>
+      <button class="chip" aria-pressed="false" data-filter="commit">Commitment</button>
+      <button class="chip" aria-pressed="false" data-filter="objections">Objections</button>
+      <button class="chip" aria-pressed="false" data-filter="disinterest">Disinterest</button>
+      <button class="chip" aria-pressed="false" data-filter="fullprocess">Full Process</button>
+      <button class="chip" aria-pressed="false" data-filter="review">Review</button>
+    </div>
+
+    <div class="grid" id="game-grid">
+
+      <article class="card" data-skills="fullprocess review">
+        <div class="card-head">
+          <p class="card-num"><span>Game 01</span><span>Teams · Stations</span></p>
+          <h3>MC3 Relay Race</h3>
+          <p class="purpose">Teach the full MC3 process in order.</p>
+        </div>
+        <div class="card-skills"><span>Full Process</span><span>Review</span></div>
+        <details>
+          <summary>Rules &amp; examples</summary>
+          <div class="card-body">
+            <h4>How it works</h4>
+            <p>Set up eight stations around the room, one per MC3 step: Build Rapport, Listen with Purpose, Engage, Explore, Enable, Gain Commitment, Respond to Objections, Respond to Disinterest. Teams race through in order. At each station they must answer a question, identify a "wrong turn," or perform a short roleplay before moving on.</p>
+            <div class="callout"><strong>Example challenge:</strong> At the Explore station, the Marine must ask an open question that uncovers a need or motivator.</div>
+            <p class="teaches">Marines learn that MC3 is a process, not just random talking.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" data-skills="review">
+        <div class="card-head">
+          <p class="card-num"><span>Game 02</span><span>1-on-1 · Cards</span></p>
+          <h3>Wrong Turn Knockout</h3>
+          <p class="purpose">Help Marines recognize mistakes.</p>
+        </div>
+        <div class="card-skills"><span>Wrong Turns</span><span>Review</span></div>
+        <details>
+          <summary>Rules &amp; examples</summary>
+          <div class="card-body">
+            <h4>How it works</h4>
+            <p>Create cards with correct actions and wrong turns. Marines compete one-on-one: the instructor reads a scenario, and each Marine must decide whether the card is a correct move or a wrong turn.</p>
+            <h4>Sample cards</h4>
+            <ul>
+              <li>Talking more than asking</li>
+              <li>Sounding robotic</li>
+              <li>Ignoring disinterest</li>
+              <li>Arguing</li>
+              <li>Testing for yes</li>
+              <li>Listening for facts and feelings</li>
+              <li>Matching and mirroring</li>
+              <li>Dumptrucking irrelevant features</li>
+            </ul>
+            <div class="callout"><strong>Example:</strong> "The applicant says they are not interested, and the recruiter keeps pushing harder." → Wrong turn — ignoring or arguing with disinterest.</div>
+            <p class="teaches">Marines learn what <em>not</em> to do during a conversation.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" data-skills="objections">
+        <div class="card-head">
+          <p class="card-num"><span>Game 03</span><span>Pairs · Roleplay</span></p>
+          <h3>Objection Boss Fight</h3>
+          <p class="purpose">Practice responding to objections.</p>
+        </div>
+        <div class="card-skills"><span>Objections</span></div>
+        <details>
+          <summary>Rules &amp; examples</summary>
+          <div class="card-body">
+            <h4>How it works</h4>
+            <p>One Marine plays the "Boss," giving objections. The other Marine must defeat each objection using the four steps:</p>
+            <ol>
+              <li>Ask questions to understand the objection</li>
+              <li>Respect the objection</li>
+              <li>Address the objection</li>
+              <li>Test for yes</li>
+            </ol>
+            <h4>Boss objections</h4>
+            <ul>
+              <li>"I need to talk to my parents."</li>
+              <li>"I'm not interested."</li>
+              <li>"I don't think I can pass boot camp."</li>
+              <li>"College is more important."</li>
+              <li>"I don't want to leave home."</li>
+            </ul>
+            <div class="callout"><strong>Combat rules:</strong> The Boss has 3 health points. A good response removes 1 point. A poor response gives the Boss a counterattack.</div>
+            <p class="teaches">Marines practice handling objections without arguing or rushing.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" data-skills="explore listen">
+        <div class="card-head">
+          <p class="card-num"><span>Game 04</span><span>Pairs · Hidden cards</span></p>
+          <h3>Motivator Detective</h3>
+          <p class="purpose">Teach Marines to identify needs and motivators.</p>
+        </div>
+        <div class="card-skills"><span>Explore</span><span>Listening</span></div>
+        <details>
+          <summary>Rules &amp; examples</summary>
+          <div class="card-body">
+            <h4>How it works</h4>
+            <p>One Marine receives a hidden motivator card: Money, Family pride, Education, Challenge, Travel, Purpose, Career direction, Belonging, Discipline, or Physical improvement. The other Marine must discover it using open questions only.</p>
+            <h4>Rules</h4>
+            <p>No direct guessing ("Is your motivator money?"). Use open questions like:</p>
+            <ul>
+              <li>"What are you hoping to change in your life?"</li>
+              <li>"What matters most to you after high school?"</li>
+              <li>"Why is that important to you?"</li>
+            </ul>
+            <p class="teaches">Motivators can be circumstances, feelings, or goals — and open questions find them.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" data-skills="enable">
+        <div class="card-head">
+          <p class="card-num"><span>Game 05</span><span>Teams · Matching</span></p>
+          <h3>Feature or Benefit?</h3>
+          <p class="purpose">Teach the difference between Marine Corps features and benefits.</p>
+        </div>
+        <div class="card-skills"><span>Enable</span></div>
+        <details>
+          <summary>Rules &amp; examples</summary>
+          <div class="card-body">
+            <h4>How it works</h4>
+            <p>Create two piles of cards — Features and Benefits. Teams must match features to the correct applicant need.</p>
+            <h4>Sample pairs</h4>
+            <div class="callout"><strong>Feature:</strong> "Marine Corps offers education benefits."<br><strong>Benefit:</strong> "That can help you pay for college and reduce financial stress."</div>
+            <div class="callout"><strong>Feature:</strong> "Marines receive leadership training."<br><strong>Benefit:</strong> "That can help you build confidence and become more competitive in future careers."</div>
+            <p class="teaches">Don't just list facts — connect features to the applicant's actual need.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" data-skills="rapport">
+        <div class="card-head">
+          <p class="card-num"><span>Game 06</span><span>Rotating pairs · 2 min</span></p>
+          <h3>Rapport Speed Round</h3>
+          <p class="purpose">Practice building rapport quickly.</p>
+        </div>
+        <div class="card-skills"><span>Rapport</span></div>
+        <details>
+          <summary>Rules &amp; examples</summary>
+          <div class="card-body">
+            <h4>How it works</h4>
+            <p>Marines rotate partners every two minutes. Each pair must build rapport using one method: demonstrate Marine Corps values, find common ground, or match and mirror.</p>
+            <h4>Scoring (by partner)</h4>
+            <ul>
+              <li>Did they sound natural?</li>
+              <li>Did they find common ground?</li>
+              <li>Did they avoid sounding robotic?</li>
+              <li>Did they avoid inappropriate jokes or intimidation?</li>
+            </ul>
+            <p class="teaches">Marines practice opening conversations naturally and professionally.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" data-skills="listen">
+        <div class="card-head">
+          <p class="card-num"><span>Game 07</span><span>Pairs · Acting</span></p>
+          <h3>Listen With Purpose Charades</h3>
+          <p class="purpose">Teach active listening and body language.</p>
+        </div>
+        <div class="card-skills"><span>Listening</span></div>
+        <details>
+          <summary>Rules &amp; examples</summary>
+          <div class="card-body">
+            <h4>How it works</h4>
+            <p>One Marine acts out a feeling without saying it: nervous, excited, unsure, defensive, curious, pressured, or disinterested. The other Marine must identify the feeling and respond appropriately.</p>
+            <div class="callout"><strong>Example response:</strong> "You seem unsure about something. What part of this are you most concerned about?"</div>
+            <p class="teaches">Observe body language and listen for both facts and feelings.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" data-skills="commit">
+        <div class="card-head">
+          <p class="card-num"><span>Game 08</span><span>Scenarios · Decision</span></p>
+          <h3>Gain Commitment Ladder</h3>
+          <p class="purpose">Practice asking for the most aggressive realistic commitment.</p>
+        </div>
+        <div class="card-skills"><span>Commitment</span></div>
+        <details>
+          <summary>Rules &amp; examples</summary>
+          <div class="card-body">
+            <h4>How it works</h4>
+            <p>Give Marines applicant scenarios. They must choose the strongest realistic commitment, state next steps, and test for yes.</p>
+            <h4>Commitment options</h4>
+            <ul>
+              <li>Set an appointment</li>
+              <li>Complete an application</li>
+              <li>Bring parents to the office</li>
+              <li>Take a practice ASVAB</li>
+              <li>Speak with an influencer</li>
+              <li>Follow up next week</li>
+              <li>Review information online</li>
+            </ul>
+            <div class="callout"><strong>Example:</strong> "Based on what you said about wanting structure and career direction, the next step is to come by the office tomorrow at 1600 so we can go over your options. Does that work?"</div>
+            <p class="teaches">Move the conversation forward instead of ending vaguely.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" data-skills="review">
+        <div class="card-head">
+          <p class="card-num"><span>Game 09</span><span>Classroom · Quiz</span></p>
+          <h3>MC3 Jeopardy</h3>
+          <p class="purpose">Review the material in a fun classroom format.</p>
+        </div>
+        <div class="card-skills"><span>Review</span></div>
+        <details>
+          <summary>Rules &amp; examples</summary>
+          <div class="card-body">
+            <h4>Categories</h4>
+            <p>Definitions · Build Rapport · Listen with Purpose · Engage · Explore · Enable · Gain Commitment · Objections · Disinterest · Wrong Turns</p>
+            <h4>Sample questions</h4>
+            <div class="callout"><strong>Definitions:</strong> "This is a force that can drive a need." → <em>What is a motivator?</em></div>
+            <div class="callout"><strong>Wrong Turns:</strong> "Doing this during Explore means the Marine is speaking too much." → <em>What is talking more than asking?</em></div>
+            <p class="teaches">Good for test review or end-of-class reinforcement.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" data-skills="fullprocess objections disinterest">
+        <div class="card-head">
+          <p class="card-num"><span>Game 10</span><span>Groups · Roleplay</span></p>
+          <h3>Recruiter Scenario Cards</h3>
+          <p class="purpose">Apply the whole process in realistic conversations.</p>
+        </div>
+        <div class="card-skills"><span>Full Process</span><span>Objections</span><span>Disinterest</span></div>
+        <details>
+          <summary>Rules &amp; examples</summary>
+          <div class="card-body">
+            <h4>How it works</h4>
+            <p>Each group draws a scenario card and roleplays the conversation through all six steps — Build Rapport, Listen with Purpose, Engage, Explore, Enable, Gain Commitment. If an objection or disinterest appears, they must respond correctly.</p>
+            <h4>Sample cards</h4>
+            <ul>
+              <li>A high school senior wants college but thinks the Marine Corps will stop them from going.</li>
+              <li>An applicant is physically fit but says their parents do not support the military.</li>
+              <li>A student says they are not interested and only stopped by because their friend did.</li>
+              <li>A graduate wants travel, money, and purpose but does not know much about the Marine Corps.</li>
+            </ul>
+            <p class="teaches">This turns the wallchart into real practice.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" data-skills="disinterest">
+        <div class="card-head">
+          <p class="card-num"><span>Game 11</span><span>Pairs · Roleplay</span></p>
+          <h3>Disinterest Recovery Game</h3>
+          <p class="purpose">Practice responding to someone who does not appear interested.</p>
+        </div>
+        <div class="card-skills"><span>Disinterest</span></div>
+        <details>
+          <summary>Rules &amp; examples</summary>
+          <div class="card-body">
+            <h4>How it works</h4>
+            <p>One Marine opens every scenario with disinterest: "I'm good." · "I don't want to talk." · "The military isn't for me." · "I'm just waiting for my friend." · "I already have plans."</p>
+            <h4>The recovery process</h4>
+            <ol>
+              <li>Ask questions to understand the disinterest</li>
+              <li>State the value of continuing the conversation</li>
+              <li>Test for yes</li>
+              <li>Respect the disinterest if needed</li>
+            </ol>
+            <p class="teaches">Don't let disinterest end the conversation immediately — but never argue or pressure.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" data-skills="review fullprocess">
+        <div class="card-head">
+          <p class="card-num"><span>Game 12</span><span>Class · Card hands</span></p>
+          <h3>MC3 Card Battle</h3>
+          <p class="purpose">Make the concepts competitive.</p>
+        </div>
+        <div class="card-skills"><span>Review</span><span>Full Process</span></div>
+        <details>
+          <summary>Rules &amp; examples</summary>
+          <div class="card-body">
+            <h4>How it works</h4>
+            <p>Each Marine holds a hand of skill cards: Open Question, Closed Question, Build Rapport, Listen for Feelings, Enable, Test for Yes, Respect the Objection, Wrong Turn, Gain Commitment. The instructor reads a scenario; Marines play the best card and explain why. Best answer wins the round.</p>
+            <div class="callout"><strong>Example scenario:</strong> "My parents would never let me join." → Best plays: Ask Questions to Understand · Respect the Objection · Address the Objection · Test for Yes.</div>
+            <p class="teaches">Marines learn which skill fits which part of the conversation.</p>
+          </div>
+        </details>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="deck" aria-labelledby="deck-h">
+  <div class="wrap">
+    <p class="section-label">Live Classroom Tool</p>
+    <h2 id="deck-h">Drill card generator</h2>
+    <p class="section-note">No printed cards? Draw one here. Use it for Objection Boss Fight, Motivator Detective, Disinterest Recovery, or Recruiter Scenarios.</p>
+    <div class="deck-controls">
+      <button class="deck-btn obj" data-deck="objection">Draw Objection</button>
+      <button class="deck-btn mot" data-deck="motivator">Draw Motivator</button>
+      <button class="deck-btn dis" data-deck="disinterest">Draw Disinterest</button>
+      <button class="deck-btn scn" data-deck="scenario">Draw Scenario</button>
+    </div>
+    <div class="drill-card empty" id="drill-card" aria-live="polite">
+      <p class="kind" id="drill-kind">Standing by</p>
+      <p class="text" id="drill-text">Press a button to draw a card for your drill.</p>
+      <p class="hint" id="drill-hint"></p>
+    </div>
+  </div>
+</section>
+
+<section class="compday" aria-labelledby="comp-h">
+  <div class="wrap">
+    <p class="section-label">Recommended Class Plan</p>
+    <h2 id="comp-h">MC3 Competition Day</h2>
+    <p class="section-note">A full-class sequence that builds from knowledge to realistic application.</p>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-num">1</div><div><strong>MC3 Jeopardy</strong><p>Open with review — lock in the definitions and wrong turns.</p></div></div>
+      <div class="tl-item"><div class="tl-num">2</div><div><strong>Motivator Detective</strong><p>Practice open questioning and uncovering needs.</p></div></div>
+      <div class="tl-item"><div class="tl-num">3</div><div><strong>Objection Boss Fight</strong><p>Drill the four-step objection response under pressure.</p></div></div>
+      <div class="tl-item"><div class="tl-num">4</div><div><strong>Recruiter Scenario Cards</strong><p>Final graded event — the full process in a realistic conversation.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>MC3 Training Games · Instructor reference built from the MC3 wallchart.</p>
+    <p class="mono">Tip: use your browser's Print for handout copies.</p>
+  </div>
+</footer>
+
+<div class="stripe" aria-hidden="true"></div>
+
+<script>
+// ---------- skill filter ----------
+const chips = document.querySelectorAll('.chip');
+const cards = document.querySelectorAll('#game-grid .card');
+chips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    chips.forEach(c => c.setAttribute('aria-pressed', 'false'));
+    chip.setAttribute('aria-pressed', 'true');
+    const f = chip.dataset.filter;
+    cards.forEach(card => {
+      const skills = card.dataset.skills.split(' ');
+      card.dataset.hidden = (f !== 'all' && !skills.includes(f)) ? 'true' : 'false';
+    });
+  });
+});
+
+// ---------- drill deck ----------
+const decks = {
+  objection: {
+    label: 'Objection',
+    hint: 'Respond in four steps: understand → respect → address → test for yes.',
+    cards: [
+      '"I need to talk to my parents."',
+      '"I\'m not interested."',
+      '"I don\'t think I can pass boot camp."',
+      '"College is more important."',
+      '"I don\'t want to leave home."'
+    ]
+  },
+  motivator: {
+    label: 'Hidden Motivator',
+    hint: 'Partner must uncover this with open questions only — no direct guessing.',
+    cards: ['Money','Family pride','Education','Challenge','Travel','Purpose','Career direction','Belonging','Discipline','Physical improvement']
+  },
+  disinterest: {
+    label: 'Disinterest Opener',
+    hint: 'Understand it → state the value of continuing → test for yes → respect it if needed.',
+    cards: [
+      '"I\'m good."',
+      '"I don\'t want to talk."',
+      '"The military isn\'t for me."',
+      '"I\'m just waiting for my friend."',
+      '"I already have plans."'
+    ]
+  },
+  scenario: {
+    label: 'Recruiter Scenario',
+    hint: 'Run the full process: rapport → listen → engage → explore → enable → gain commitment.',
+    cards: [
+      'A high school senior wants college but thinks the Marine Corps will stop them from going.',
+      'An applicant is physically fit but says their parents do not support the military.',
+      'A student says they are not interested and only stopped by because their friend did.',
+      'A graduate wants travel, money, and purpose but does not know much about the Marine Corps.'
+    ]
+  }
+};
+
+const cardEl = document.getElementById('drill-card');
+const kindEl = document.getElementById('drill-kind');
+const textEl = document.getElementById('drill-text');
+const hintEl = document.getElementById('drill-hint');
+let lastCard = null;
+
+document.querySelectorAll('.deck-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const deck = decks[btn.dataset.deck];
+    let pick;
+    do { pick = deck.cards[Math.floor(Math.random() * deck.cards.length)]; }
+    while (deck.cards.length > 1 && pick === lastCard);
+    lastCard = pick;
+    cardEl.classList.remove('empty');
+    kindEl.textContent = deck.label;
+    textEl.textContent = pick;
+    hintEl.textContent = deck.hint;
+  });
+});
+</script>
+</body>
+</html>
