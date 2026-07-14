@@ -230,6 +230,67 @@ header h1 .accent{color:var(--scarlet);-webkit-text-stroke:1px var(--canvas)}
   .flip-inner{transition:none}
 }
 
+/* ---------- quiz sections (FITB / MC / test) ---------- */
+.quiz{padding:56px 24px;border-top:1px solid var(--sage-dim)}
+.quiz.alt{background:var(--od-deep)}
+.quiz-card{
+  max-width:720px;background:var(--canvas);color:var(--ink);border-radius:var(--radius);
+  border-top:6px solid var(--scarlet);padding:26px 28px;
+}
+.quiz-card .kind{
+  font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--scarlet);margin-bottom:10px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+}
+.quiz-card .prompt{font-size:1.2rem;font-weight:600;line-height:1.45;margin-bottom:18px}
+.quiz-card .prompt .blank{
+  display:inline-block;min-width:110px;border-bottom:3px solid var(--scarlet);
+  text-align:center;font-weight:700;color:var(--scarlet);
+}
+.fib-row{display:flex;gap:10px;flex-wrap:wrap}
+.fib-input{
+  flex:1;min-width:200px;font-family:"Barlow",sans-serif;font-size:1.05rem;font-weight:600;
+  padding:11px 14px;border:2px solid #c4b995;border-radius:4px;background:#f4efdf;color:var(--ink);
+}
+.fib-input:focus{outline:none;border-color:var(--scarlet)}
+.mc-opts{display:flex;flex-direction:column;gap:9px;margin-bottom:16px}
+.mc-opt{
+  text-align:left;font-family:"Barlow",sans-serif;font-size:1rem;font-weight:500;cursor:pointer;
+  padding:12px 16px;border:2px solid #c4b995;border-radius:4px;background:#f4efdf;color:var(--ink);
+  transition:border-color .12s;
+}
+.mc-opt:hover:not(:disabled){border-color:var(--gold)}
+.mc-opt:disabled{cursor:default}
+.mc-opt.correct{border-color:#2e6b34;background:#e2ecdb;font-weight:700}
+.mc-opt.incorrect{border-color:var(--scarlet);background:#f3ddde}
+.quiz-feedback{
+  min-height:26px;font-weight:700;font-size:.98rem;margin-bottom:14px;
+}
+.quiz-feedback.good{color:#2e6b34}
+.quiz-feedback.bad{color:var(--scarlet)}
+.quiz-nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.quiz-nav .deck-btn{font-size:.95rem;padding:10px 18px}
+.quiz-score{
+  font-family:"IBM Plex Mono",monospace;font-size:.8rem;letter-spacing:.14em;color:#4a4534;margin-left:auto;
+}
+.test-result{
+  max-width:720px;background:var(--canvas);color:var(--ink);border-radius:var(--radius);
+  border-top:6px solid var(--gold);padding:28px;
+}
+.test-grade{
+  font-family:"Big Shoulders Stencil Display",sans-serif;font-size:3.4rem;font-weight:900;
+  text-transform:uppercase;line-height:1;
+}
+.test-grade.go{color:#2e6b34}
+.test-grade.nogo{color:var(--scarlet)}
+.test-pct{font-family:"IBM Plex Mono",monospace;font-size:.9rem;letter-spacing:.16em;color:#4a4534;margin:6px 0 18px}
+.test-missed{border-top:1px dashed #c4b995;padding-top:14px}
+.test-missed h4{
+  font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--scarlet);margin-bottom:8px;
+}
+.test-missed p{font-size:.94rem;margin:6px 0}
+.test-missed strong{color:#2e6b34}
+
 footer{padding:34px 24px 44px;border-top:1px solid var(--sage-dim);color:var(--sage);font-size:.9rem}
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
@@ -258,7 +319,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <h1>MC3 Training <span class="accent">Games</span></h1>
     <p class="sub">Twelve classroom games that turn the MC3 wallchart into live practice — rapport, questioning, objections, disinterest, and closing the commitment. Pick a game, brief the rules, run the drill.</p>
     <div class="hero-tags">
-      <span>12 games</span><span>8 skills</span><span>51 flash cards</span><span>Drill card generator</span><span>Print-friendly</span>
+      <span>12 games</span><span>51 flash cards</span><span>Fill in the blank</span><span>Multiple choice</span><span>Graded knowledge check</span>
     </div>
   </div>
 </header>
@@ -648,6 +709,79 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </div>
 </section>
 
+<section class="quiz alt" aria-labelledby="fib-h">
+  <div class="wrap">
+    <p class="section-label">Study Tool</p>
+    <h2 id="fib-h">Fill in the blank</h2>
+    <p class="section-note">Type the missing word, then check your answer. Spelling counts — just like the wallchart.</p>
+    <div class="quiz-card">
+      <p class="kind"><span>Fill in the blank</span><span id="fib-cat"></span></p>
+      <p class="prompt" id="fib-prompt"></p>
+      <div class="fib-row">
+        <input class="fib-input" id="fib-input" type="text" autocomplete="off" aria-label="Your answer">
+      </div>
+      <p class="quiz-feedback" id="fib-feedback" aria-live="polite"></p>
+      <div class="quiz-nav">
+        <button class="deck-btn obj" id="fib-check">Check</button>
+        <button class="deck-btn dis" id="fib-reveal" style="border-color:#c4b995;color:#4a4534">Reveal</button>
+        <button class="deck-btn scn" id="fib-next" style="background:var(--od);color:var(--canvas)">Next ▶</button>
+        <span class="quiz-score" id="fib-score">0 correct</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="quiz" aria-labelledby="mc-h">
+  <div class="wrap">
+    <p class="section-label">Study Tool</p>
+    <h2 id="mc-h">Multiple choice</h2>
+    <p class="section-note">Pick an answer and get instant feedback. Run the whole set before test day.</p>
+    <div class="quiz-card">
+      <p class="kind"><span>Multiple choice</span><span id="mc-count"></span></p>
+      <p class="prompt" id="mc-prompt"></p>
+      <div class="mc-opts" id="mc-opts"></div>
+      <p class="quiz-feedback" id="mc-feedback" aria-live="polite"></p>
+      <div class="quiz-nav">
+        <button class="deck-btn scn" id="mc-next" style="background:var(--od);color:var(--canvas)">Next ▶</button>
+        <button class="deck-btn mot" id="mc-restart">Restart</button>
+        <span class="quiz-score" id="mc-score">Score: 0 / 0</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="quiz alt" aria-labelledby="test-h">
+  <div class="wrap">
+    <p class="section-label">Graded Event</p>
+    <h2 id="test-h">Knowledge check</h2>
+    <p class="section-note">Ten random questions, no feedback until the end. Score 80% or better for a GO. Missed questions are reviewed on the results screen.</p>
+
+    <div class="quiz-card" id="test-start-panel">
+      <p class="kind"><span>Knowledge check</span><span>10 questions · 80% to pass</span></p>
+      <p class="prompt">Questions are drawn at random from the full question pool, so every attempt is different. Ready?</p>
+      <div class="quiz-nav">
+        <button class="deck-btn obj" id="test-start">Begin Test</button>
+      </div>
+    </div>
+
+    <div class="quiz-card" id="test-panel" hidden>
+      <p class="kind"><span>Knowledge check</span><span id="test-count"></span></p>
+      <p class="prompt" id="test-prompt"></p>
+      <div class="mc-opts" id="test-opts"></div>
+    </div>
+
+    <div class="test-result" id="test-result" hidden>
+      <p class="kind" style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--scarlet);margin-bottom:10px">Results</p>
+      <p class="test-grade" id="test-grade"></p>
+      <p class="test-pct" id="test-pct"></p>
+      <div class="test-missed" id="test-missed"></div>
+      <div class="quiz-nav" style="margin-top:18px">
+        <button class="deck-btn obj" id="test-retry">Retake Test</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="compday" aria-labelledby="comp-h">
   <div class="wrap">
     <p class="section-label">Recommended Class Plan</p>
@@ -875,6 +1009,206 @@ document.querySelectorAll('.fchip').forEach(chip => {
   });
 });
 renderFlash();
+
+// ==================================================
+// FILL IN THE BLANK
+// Edit fibItems to match your wallchart's exact wording.
+// "text" uses ___ where the blank goes; "answers" lists accepted answers.
+// ==================================================
+const fibItems = [
+  { cat:'Definitions', text:'A motivator is a force that can drive a ___.', answers:['need'] },
+  { cat:'Definitions', text:'Motivators can be circumstances, feelings, or ___.', answers:['goals','a goal','goal'] },
+  { cat:'Definitions', text:'___ questions invite the applicant to explain in their own words.', answers:['open'] },
+  { cat:'Definitions', text:'A ___ is a fact about the Marine Corps; a benefit is what it does for the applicant\'s need.', answers:['feature'] },
+  { cat:'Build Rapport', text:'Matching and ___ is one way to build rapport.', answers:['mirroring'] },
+  { cat:'Build Rapport', text:'One way to build rapport is to demonstrate Marine Corps ___.', answers:['values'] },
+  { cat:'Listen with Purpose', text:'Listen with Purpose means listening for facts and ___.', answers:['feelings'] },
+  { cat:'Explore', text:'During Explore, a wrong turn is talking more than ___.', answers:['asking'] },
+  { cat:'Explore', text:'The step where you uncover needs and motivators is called ___.', answers:['explore'] },
+  { cat:'Enable', text:'The step where you connect features to the applicant\'s needs is called ___.', answers:['enable'] },
+  { cat:'Enable', text:'Unloading irrelevant features on an applicant is called ___.', answers:['dumptrucking','dump trucking'] },
+  { cat:'Gain Commitment', text:'Gain Commitment means asking for the most ___ realistic commitment.', answers:['aggressive'] },
+  { cat:'Gain Commitment', text:'After stating next steps, you always ___ for yes.', answers:['test'] },
+  { cat:'Respond to Objections', text:'The first step of responding to an objection is to ask questions to ___ the objection.', answers:['understand'] },
+  { cat:'Respond to Objections', text:'The second step of responding to an objection is to ___ the objection.', answers:['respect'] },
+  { cat:'Respond to Disinterest', text:'When responding to disinterest, state the ___ of continuing the conversation.', answers:['value'] },
+  { cat:'Respond to Disinterest', text:'If the disinterest holds, you must ___ the disinterest.', answers:['respect'] }
+];
+
+let fibOrder = fibItems.map((_, i) => i).sort(() => Math.random() - .5);
+let fibIdx = 0, fibCorrect = 0, fibAnswered = false;
+const fibPrompt = document.getElementById('fib-prompt');
+const fibCat = document.getElementById('fib-cat');
+const fibInput = document.getElementById('fib-input');
+const fibFeedback = document.getElementById('fib-feedback');
+const fibScore = document.getElementById('fib-score');
+
+function renderFib() {
+  const item = fibItems[fibOrder[fibIdx]];
+  fibCat.textContent = item.cat;
+  fibPrompt.innerHTML = item.text.replace('___', '<span class="blank">&nbsp;</span>');
+  fibInput.value = '';
+  fibInput.disabled = false;
+  fibAnswered = false;
+  fibFeedback.textContent = '';
+  fibFeedback.className = 'quiz-feedback';
+}
+function fibShowAnswer(good) {
+  const item = fibItems[fibOrder[fibIdx]];
+  fibPrompt.innerHTML = item.text.replace('___', '<span class="blank">' + item.answers[0] + '</span>');
+  fibInput.disabled = true;
+  fibAnswered = true;
+  if (good === true) { fibCorrect++; fibFeedback.textContent = 'Correct.'; fibFeedback.className = 'quiz-feedback good'; }
+  else if (good === false) { fibFeedback.textContent = 'Not quite — the answer is "' + item.answers[0] + '".'; fibFeedback.className = 'quiz-feedback bad'; }
+  else { fibFeedback.textContent = 'Answer revealed.'; fibFeedback.className = 'quiz-feedback'; }
+  fibScore.textContent = fibCorrect + ' correct';
+}
+document.getElementById('fib-check').addEventListener('click', () => {
+  if (fibAnswered) return;
+  const item = fibItems[fibOrder[fibIdx]];
+  const guess = fibInput.value.trim().toLowerCase();
+  if (!guess) return;
+  fibShowAnswer(item.answers.some(a => a.toLowerCase() === guess));
+});
+fibInput.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('fib-check').click(); });
+document.getElementById('fib-reveal').addEventListener('click', () => { if (!fibAnswered) fibShowAnswer(null); });
+document.getElementById('fib-next').addEventListener('click', () => {
+  fibIdx = (fibIdx + 1) % fibOrder.length;
+  if (fibIdx === 0) fibOrder = fibItems.map((_, i) => i).sort(() => Math.random() - .5);
+  renderFib();
+});
+renderFib();
+
+// ==================================================
+// MULTIPLE CHOICE
+// Edit mcItems to match your wallchart's exact wording.
+// "correct" is the index (0-3) of the right option.
+// ==================================================
+const mcItems = [
+  { q:'What is a motivator?', opts:['A fact about the Marine Corps','A force that can drive a need','A closed question','The final step of the process'], correct:1 },
+  { q:'Which of these is NOT a way to build rapport?', opts:['Demonstrate Marine Corps values','Find common ground','Match and mirror','Intimidation'], correct:3 },
+  { q:'What is the FIRST step of responding to an objection?', opts:['Address the objection','Respect the objection','Ask questions to understand the objection','Test for yes'], correct:2 },
+  { q:'What is the FINAL step of responding to an objection?', opts:['Test for yes','Respect the objection','Restate the benefit','Change the subject'], correct:0 },
+  { q:'Which of these is a wrong turn during Explore?', opts:['Asking open questions','Talking more than asking','Confirming what you heard','Asking "why is that important to you?"'], correct:1 },
+  { q:'"The Marine Corps offers education benefits" is a…', opts:['Benefit','Motivator','Feature','Commitment'], correct:2 },
+  { q:'"That can help you pay for college and reduce financial stress" is a…', opts:['Feature','Benefit','Wrong turn','Objection'], correct:1 },
+  { q:'An applicant says, "I\'m just waiting for my friend." This is…', opts:['An objection','A motivator','Disinterest','A commitment'], correct:2 },
+  { q:'An applicant says, "I need to talk to my parents." This is…', opts:['Disinterest','An objection','A need','A feature'], correct:1 },
+  { q:'What is the correct order of the MC3 process?', opts:['Engage → Explore → Build Rapport → Enable → Listen → Gain Commitment','Build Rapport → Listen with Purpose → Engage → Explore → Enable → Gain Commitment','Explore → Engage → Enable → Build Rapport → Listen → Gain Commitment','Build Rapport → Enable → Explore → Engage → Listen → Gain Commitment'], correct:1 },
+  { q:'Listen with Purpose means listening for…', opts:['Facts only','Feelings only','Facts and feelings','Keywords to pitch against'], correct:2 },
+  { q:'Which is the most aggressive realistic commitment?', opts:['Review information online','Follow up next week','Complete an application','Think it over'], correct:2 },
+  { q:'"Dumptrucking" means…', opts:['Asking too many questions','Unloading irrelevant features','Ending the conversation early','Matching and mirroring too much'], correct:1 },
+  { q:'If disinterest remains after you state the value and test for yes, you should…', opts:['Push harder','Argue the point','Respect the disinterest','Repeat the same pitch'], correct:2 },
+  { q:'When responding to disinterest, after asking questions to understand it, you should…', opts:['State the value of continuing the conversation','Immediately end the conversation','List Marine Corps features','Ask for an application'], correct:0 },
+  { q:'When should you present features and benefits?', opts:['Immediately after saying hello','Before asking any questions','Only after needs and motivators are uncovered','Only after gaining commitment'], correct:2 }
+];
+
+let mcOrder = mcItems.map((_, i) => i).sort(() => Math.random() - .5);
+let mcIdx = 0, mcRight = 0, mcTotal = 0, mcAnswered = false;
+const mcPrompt = document.getElementById('mc-prompt');
+const mcOpts = document.getElementById('mc-opts');
+const mcFeedback = document.getElementById('mc-feedback');
+const mcScore = document.getElementById('mc-score');
+const mcCount = document.getElementById('mc-count');
+
+function buildOpts(container, item, onPick) {
+  container.innerHTML = '';
+  item.opts.forEach((opt, i) => {
+    const b = document.createElement('button');
+    b.className = 'mc-opt';
+    b.textContent = String.fromCharCode(65 + i) + '. ' + opt;
+    b.addEventListener('click', () => onPick(i, b));
+    container.appendChild(b);
+  });
+}
+function renderMc() {
+  const item = mcItems[mcOrder[mcIdx]];
+  mcAnswered = false;
+  mcPrompt.textContent = item.q;
+  mcFeedback.textContent = '';
+  mcFeedback.className = 'quiz-feedback';
+  mcCount.textContent = 'Question ' + (mcIdx + 1) + ' of ' + mcOrder.length;
+  buildOpts(mcOpts, item, (i, btn) => {
+    if (mcAnswered) return;
+    mcAnswered = true;
+    mcTotal++;
+    const buttons = mcOpts.querySelectorAll('.mc-opt');
+    buttons.forEach(b => b.disabled = true);
+    buttons[item.correct].classList.add('correct');
+    if (i === item.correct) { mcRight++; mcFeedback.textContent = 'Correct.'; mcFeedback.className = 'quiz-feedback good'; }
+    else { btn.classList.add('incorrect'); mcFeedback.textContent = 'Incorrect.'; mcFeedback.className = 'quiz-feedback bad'; }
+    mcScore.textContent = 'Score: ' + mcRight + ' / ' + mcTotal;
+  });
+}
+document.getElementById('mc-next').addEventListener('click', () => {
+  mcIdx = (mcIdx + 1) % mcOrder.length;
+  if (mcIdx === 0) mcOrder = mcItems.map((_, i) => i).sort(() => Math.random() - .5);
+  renderMc();
+});
+document.getElementById('mc-restart').addEventListener('click', () => {
+  mcOrder = mcItems.map((_, i) => i).sort(() => Math.random() - .5);
+  mcIdx = 0; mcRight = 0; mcTotal = 0;
+  mcScore.textContent = 'Score: 0 / 0';
+  renderMc();
+});
+renderMc();
+
+// ==================================================
+// KNOWLEDGE CHECK (graded test)
+// Draws 10 random questions from the multiple choice pool.
+// 80% or better = GO.
+// ==================================================
+const TEST_LEN = 10, TEST_PASS = 0.8;
+let testQs = [], testIdx = 0, testAnswers = [];
+const testStartPanel = document.getElementById('test-start-panel');
+const testPanel = document.getElementById('test-panel');
+const testResult = document.getElementById('test-result');
+
+function startTest() {
+  testQs = mcItems.slice().sort(() => Math.random() - .5).slice(0, Math.min(TEST_LEN, mcItems.length));
+  testIdx = 0;
+  testAnswers = [];
+  testStartPanel.hidden = true;
+  testResult.hidden = true;
+  testPanel.hidden = false;
+  renderTestQ();
+}
+function renderTestQ() {
+  const item = testQs[testIdx];
+  document.getElementById('test-count').textContent = 'Question ' + (testIdx + 1) + ' of ' + testQs.length;
+  document.getElementById('test-prompt').textContent = item.q;
+  buildOpts(document.getElementById('test-opts'), item, (i) => {
+    testAnswers.push(i);
+    testIdx++;
+    if (testIdx < testQs.length) renderTestQ();
+    else showTestResult();
+  });
+}
+function showTestResult() {
+  testPanel.hidden = true;
+  const missed = [];
+  let right = 0;
+  testQs.forEach((q, i) => {
+    if (testAnswers[i] === q.correct) right++;
+    else missed.push(q);
+  });
+  const pct = right / testQs.length;
+  const gradeEl = document.getElementById('test-grade');
+  gradeEl.textContent = pct >= TEST_PASS ? 'GO' : 'NO-GO';
+  gradeEl.className = 'test-grade ' + (pct >= TEST_PASS ? 'go' : 'nogo');
+  document.getElementById('test-pct').textContent = right + ' of ' + testQs.length + ' correct · ' + Math.round(pct * 100) + '% · ' + Math.round(TEST_PASS * 100) + '% required';
+  const missedEl = document.getElementById('test-missed');
+  if (missed.length === 0) {
+    missedEl.innerHTML = '<h4>Review</h4><p>Perfect score — nothing to review.</p>';
+  } else {
+    missedEl.innerHTML = '<h4>Review these</h4>' + missed.map(q =>
+      '<p>' + q.q + '<br><strong>Answer: ' + q.opts[q.correct] + '</strong></p>'
+    ).join('');
+  }
+  testResult.hidden = false;
+}
+document.getElementById('test-start').addEventListener('click', startTest);
+document.getElementById('test-retry').addEventListener('click', startTest);
 </script>
 </body>
 </html>
